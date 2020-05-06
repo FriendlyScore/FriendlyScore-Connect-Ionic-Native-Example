@@ -1,4 +1,4 @@
-# Ionic Android Implementation
+# Ionic Implementation
 
 ## Overview
 
@@ -7,21 +7,23 @@ Here you can find instructions on how to integrate and use FriendlyScore Connect
 To get started quickly with FriendlyScore Connect for Ionic, clone the [GitHub repository](https://github.com/FriendlyScore/FriendlyScore-Connect-Ionic-Native-Example) and run the example. You need to [sign-up](https://friendlyscore.com/getting-started) for the free API keys through our Developer Console.
 
 ## Requirements
+- [FriendlyScore API keys](https://friendlyscore.com/company/keys)
+### Ionic
 - Ionic CLI(demo uses version 6.7.0)            
 - Ionic Framework(demo uses @ionic/angular 5.1.0)
 - Capacitor:
    Capacitor CLI   : 2.0.2
    @capacitor/core : 2.0.2
+### Android
 - Install or update Android Studio version 3.2 or greater
 - Android 5.0 and greater
-- [FriendlyScore API keys](https://friendlyscore.com/company/keys)
 
 
 ## Quickstart Demo App
 
 Clone and run the demo project from our [GitHub repository](https://github.com/FriendlyScore/FriendlyScore-Connect-Ionic-Native-Example). 
 
-## Ionic Native Implementation 
+## Ionic Android Implementation 
 
 We will create the `Plugin` within the `android` section of the App that will enable interaction between the UI component and Native Android code.
 
