@@ -27,12 +27,18 @@ export class AppComponent {
   }
 
   fsEventHandler(){
-    FriendlyScoreConnectPlugin.addListener("FriendlyScoreConnectEventState", (info:any) => {
-      console.log("userClosedView," + info.userClosedView)
-      console.log("serverError," +info.serverError)
-      console.log("incompleteConfigurationMessage," +info.incompleteConfigurationMessage)
-      console.log("serviceDeniedMessage," +info.serviceDeniedMessage)
-      console.log("userReferenceAuthError," +info.userReferenceAuthError)
+    FriendlyScoreConnectPlugin.addListener("userClosedView", (info:any) => {
+      console.log(info)
+    });
+    FriendlyScoreConnectPlugin.addListener("serverError", (info:any) => {
+    });
+    FriendlyScoreConnectPlugin.addListener("incompleteConfiguration", (info:any) => {
+         console.log(info)
+    });
+    FriendlyScoreConnectPlugin.addListener("serviceDenied", (info:any) => {
+         console.log(info)
+    });
+    FriendlyScoreConnectPlugin.addListener("userReferenceAuthError", (info:any) => {
     });
   }
   initializeApp() {

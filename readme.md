@@ -1,6 +1,5 @@
 # Ionic Android Implementation
 
-  
 ## Overview
 
 Here you can find instructions on how to integrate and use FriendlyScore Connect for Ionic.
@@ -34,7 +33,7 @@ If you do not have an `android` directory in your project, execute
 
 ### Installation
 
-Please follow the instructions below to install FriendlyScore Connect for Android, provide the necessary configuration and understand the flow.
+Please follow the instructions below to install FriendlyScore Connect Android Native library, provide the necessary configuration and understand the flow.
 
 
 #### Add the following values to your project-level build.gradle file
@@ -60,7 +59,7 @@ allprojects {
   }
 }
 ```
-#### Add FriendlyScore Connect for Android configuration to your app
+#### Add configuration to your app
    
 Go to the [Redirects](https://friendlyscore.com/company/redirects) section of the FriendlyScore developer console and provide your `App Package Id` and `App Redirect Scheme`.
    
@@ -82,7 +81,7 @@ APP_REDIRECT_SCHEME=app_redirect_scheme
 
 #### Add the following values to your App Level build.gradle file(In the demo, [app/build.gradle](https://github.com/FriendlyScore/FriendlyScore-Connect-Ionic-Native-Example/blob/master/android/app/build.gradle))
   
-Now we must read the configuration to create the string resources that will be used by the FriendlyScore Connect for Android. Also we will include the FriendlyScore Connect Library.
+Now we must read the configuration to create the string resources that will be used by the FriendlyScore Connect Android library. Also we will include the FriendlyScore Connect Library.
 
 ```groovy
 android {
@@ -141,6 +140,9 @@ public class FriendlyScoreConnectPlugin extends Plugin {
 
     @PluginMethod
     public void friendlyscoreConnect(PluginCall call){
+        /**
+         You must save the call, it is required for Null check in onHandleActivityResult
+        */
         saveCall(call);
         userReference = call.getString("userreference");
         startFriendlyScore();
@@ -179,61 +181,58 @@ In order to get the result back from the FriendlyScore Connect Flow you must ove
     protected void handleOnActivityResult(int requestCode, int resultCode, Intent data)  {
         super.handleOnActivityResult(requestCode, resultCode, data);
         JSObject connectObject = new JSObject();
+        PluginCall savedCall = getSavedCall();
 
+        if (savedCall == null) {
+            return;
+        }
         if(requestCode == REQUEST_CODE_FRIENDLY_SCORE){
             if(data!=null){
 
                 //Present if there was error in creating an access token for the supplied userReference.
                 if(data.hasExtra("userReferenceAuthError")){
-                    Log.e(TAG, "userReferenceAuthError");
-                    connectObject.put("userReferenceAuthError", true);
-
+                    connectObject = new JSObject();
+                    notifyListeners("userReferenceAuthError",connectObject);
                     //Do Something
                 }
 
                 //Present if there was service denied.
                 if( data.hasExtra("serviceDenied")){
-                    connectObject.put("serviceDenied", true);
+                    connectObject = new JSObject();
                     if(data.hasExtra("serviceDeniedMessage")){
                         String serviceDeniedMessage = data.getStringExtra("serviceDeniedMessage");
                         if(serviceDeniedMessage!=null)
-                            Log.e(TAG, serviceDeniedMessage);
                         connectObject.put("serviceDeniedMessage", serviceDeniedMessage);
-
                     }
+                    notifyListeners("serviceDenied",connectObject);
                 }
                 //Present if the configuration on the server is incomplete.
                 if(data!=null && data.hasExtra("incompleteConfiguration")){
-                    connectObject.put("incompleteConfiguration", true);
-
+                    connectObject = new JSObject();
                     if(data.hasExtra("incompleteConfigurationMessage")){
                         String errorDescription = data.getStringExtra("incompleteConfigurationMessage");
                         if(errorDescription!=null)
-                            //Log.e(TAG, errorDescription);
                         connectObject.put("incompleteConfigurationMessage", errorDescription);
 
                     }
+                    notifyListeners("incompleteConfiguration",connectObject);
                 }
                 //Present if there was error in obtaining configuration from server
                 if(data.hasExtra("serverError")){
-                    Log.e(TAG, "serverError");
-                    connectObject.put("serverError", true);
-
-                    //Try again later
+                    connectObject = new JSObject();
+                    notifyListeners("serverError",connectObject);
                 }
                 //Present if the user closed the flow
                 if(data.hasExtra("userClosedView")){
+                    connectObject = new JSObject();
                     //The user closed the process
-                    Log.e(TAG, "userClosedView");
-                    connectObject.put("userClosedView", true);
+                    notifyListeners("userClosedView",connectObject);
                 }
             }
         }
-        notifyListeners("FriendlyScoreConnectEvents",connectObject);
     }
-}
 ```
-The native component dispatches `FriendlyScoreConnectEvent` to pass the data in the `onHandleActivityResult` to the Ionic Cross Platform component.
+The native component dispatches events to pass the data in the `onHandleActivityResult` to the Ionic Cross Platform component.
 
 ## Ionic UI Component
 
@@ -272,12 +271,17 @@ startfs(){
 }
 
 fsEventHandler(){
-    FriendlyScoreConnectPlugin.addListener("FriendlyScoreConnectEvents", (info:any) => {
-      console.log("userClosedView," + info.userClosedView)
-      console.log("serverError," +info.serverError)
-      console.log("incompleteConfigurationMessage," +info.incompleteConfigurationMessage)
-      console.log("serviceDeniedMessage," +info.serviceDeniedMessage)
-      console.log("userReferenceAuthError," +info.userReferenceAuthError)
+    FriendlyScoreConnectPlugin.addListener("userClosedView", (info:any) => {
+    });
+     FriendlyScoreConnectPlugin.addListener("serverError", (info:any) => {
+    });
+     FriendlyScoreConnectPlugin.addListener("incompleteConfiguration", (info:any) => {
+         console.log(info)
+    });
+     FriendlyScoreConnectPlugin.addListener("serviceDenied", (info:any) => {
+         console.log(info)
+    });
+     FriendlyScoreConnectPlugin.addListener("userReferenceAuthError", (info:any) => {
     });
 }
 
