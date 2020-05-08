@@ -1,0 +1,9 @@
+{
+  "appId": "com.demo.friendlyscore.connect",
+  "appName": "myapp",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "linuxAndroidStudioPath": "/home/depressedrobot/Documents/android-studio/bin/studio.sh",
+  "cordova": {}
+}

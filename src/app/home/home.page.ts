@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Plugins } from "@capacitor/core"
+const { MyPlugin } = Plugins
 
 @Component({
   selector: 'app-home',
@@ -8,5 +10,9 @@ import { Component } from '@angular/core';
 export class HomePage {
 
   constructor() {}
+
+  openFS() {
+    MyPlugin.echo({})
+  }
 
 }

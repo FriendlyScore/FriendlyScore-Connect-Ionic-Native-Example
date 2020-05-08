@@ -6,6 +6,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { Plugins } from "@capacitor/core";
 const { FriendlyScoreConnectPlugin } = Plugins;
+
+
+
 // Other codes...
 @Component({
   selector: 'app-root',
@@ -24,6 +27,7 @@ export class AppComponent {
   startfs(){
     this.fsEventHandler()
     FriendlyScoreConnectPlugin.friendlyscoreConnect({ userreference: "your_user_reference" });
+    
   }
 
   fsEventHandler(){
