@@ -18,6 +18,10 @@ To get started quickly with FriendlyScore Connect for Ionic, clone the [GitHub r
 - Install or update Android Studio version 3.2 or greater
 - Android 5.0 and greater
 
+### iOS
+- Xcode 11.0
+- iOS 12.0
+
 
 ## Quickstart Demo App
 
@@ -31,6 +35,14 @@ If you do not have an `android` directory in your project, execute
 ```bash
     ionic capacitor add android
 ```
+
+## Ionic iOS Implementation 
+
+If you do not have an `ios` directory in your project, execute
+```bash
+    ionic capacitor add ios
+```
+
 
 
 ### Installation
